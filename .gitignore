@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+
+# 생성물 (gen_graph.py / src/viz.py로 재생성 가능)
+data/graph.json
+graph.html
