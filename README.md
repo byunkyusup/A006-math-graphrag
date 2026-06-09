@@ -34,6 +34,10 @@
 
 ## 🌐 핵심 산출물 — 인터랙티브 지식 그래프
 
+![수학 개념 선수학습 지식 그래프 — Obsidian풍 인터랙티브 시각화](assets/graph-preview.png)
+
+> 위는 `graph.html`을 실제로 렌더링한 화면입니다(영역별 색상 클러스터·선수관계 엣지·허브 개념 라벨).
+
 `python -m src.viz` 로 자가완결 HTML을 만들고 브라우저에서 `graph.html` 을 엽니다.
 
 - **다크 테마 force-directed 그래프** (force-graph, canvas) — Obsidian 그래프뷰 느낌

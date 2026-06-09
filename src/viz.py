@@ -133,12 +133,14 @@ const Graph = ForceGraph()(document.getElementById('graph'))
   .nodeCanvasObjectMode(() => 'after')
   .nodeCanvasObject((n, ctx, scale) => {
     const dim = hi.size && !hi.has(n.id);
-    if (scale < 2.2 && !(hi.has(n.id) && hi.size)) return; // 확대 시 또는 강조 시에만 라벨
-    const label = n.label;
-    ctx.font = `${11 / scale}px -apple-system, sans-serif`;
+    // 라벨 표시: 어느 정도 확대됐거나 / 허브 노드(val 큼) / 강조된 경우
+    const show = scale > 1.1 || n.val >= 9 || (hi.size && hi.has(n.id));
+    if (!show) return;
+    const fontPx = Math.max(2.5, 11 / scale);
+    ctx.font = `${fontPx}px -apple-system, sans-serif`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-    ctx.fillStyle = dim ? 'rgba(150,155,175,0.35)' : '#e6e8ef';
-    ctx.fillText(label, n.x, n.y + Math.sqrt(n.val) * 1.6 + 1.5 / scale);
+    ctx.fillStyle = dim ? 'rgba(150,155,175,0.30)' : '#e6e8ef';
+    ctx.fillText(n.label, n.x, n.y + Math.sqrt(n.val) * 1.6 + 1.5 / scale);
   })
   .onNodeClick(n => { setFocus(n.id); Graph.centerAt(n.x, n.y, 600); })
   .onNodeHover(n => {
@@ -153,7 +155,9 @@ const Graph = ForceGraph()(document.getElementById('graph'))
   })
   .onBackgroundClick(() => setFocus(null));
 
-Graph.d3Force('charge').strength(-120);
+Graph.d3Force('charge').strength(-160);
+// 시뮬레이션이 멎으면 전체가 화면에 들어오도록 자동 맞춤 (로드 직후 빈 화면처럼 보이는 문제 방지)
+Graph.onEngineStop(() => Graph.zoomToFit(500, 50));
 
 // 검색: 라벨 부분일치 → 포커스 + 선수경로 강조
 document.getElementById('q').addEventListener('input', e => {
