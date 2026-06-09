@@ -176,18 +176,51 @@ document.getElementById('legend').innerHTML =
 """
 
 
-def build(graph_path=None, html_path=None):
+# 다크 → 라이트(흰색 배경) 테마 치환. 흰 배경에서 대비가 살도록 노드/텍스트 색을 진하게.
+_DARK_PALETTE = "['#7aa2f7','#bb9af7','#7dcfff','#9ece6a','#e0af68','#f7768e','#ff9e64','#73daca','#c0caf5']"
+_LIGHT_PALETTE = "['#2f6bd4','#8a46c9','#1592c2','#4f9a2a','#bf8412','#d6324f','#d36e1c','#1d9a86','#5163c2']"
+_LIGHT_MAP = {
+    "#0c0d12": "#f6f7fb",                      # 배경
+    "#e6e8ef": "#1f2430",                      # 본문 텍스트
+    "#8b90a3": "#5b6172",                      # 보조 텍스트
+    "#ffcf5c": "#e67e00",                      # 강조(선수 경로) — 흰 배경용 주황
+    "rgba(120,130,160,0.16)": "rgba(60,70,110,0.22)",   # 기본 엣지
+    "rgba(90,96,120,0.22)": "rgba(30,35,55,0.12)",      # 디밍 노드
+    "rgba(150,155,175,0.30)": "rgba(40,45,60,0.40)",    # 디밍 라벨
+    "#15161e": "#ffffff",                      # 검색창 배경
+    "#2a2d3a": "#cfd4df",                      # 검색창 테두리
+    "#aeb3c4": "#5b6172",                      # 범례 텍스트
+    "rgba(20,22,30,.92)": "rgba(255,255,255,.96)",      # 패널 배경
+    "#262a38": "#d7dbe4",                      # 패널 테두리
+    "#20232f": "#eceef3",                      # 칩 배경
+    "#c7cbda": "#3a3f4d",                      # 칩 텍스트
+    "#6a6f82": "#8a90a0",                      # 힌트
+}
+
+
+def _to_light(html):
+    html = html.replace(_DARK_PALETTE, _LIGHT_PALETTE)
+    for dark, light in _LIGHT_MAP.items():
+        html = html.replace(dark, light)
+    return html
+
+
+def build(graph_path=None, html_path=None, theme="light"):
     graph_path = graph_path or config.GRAPH_PATH
     html_path = html_path or config.HTML_PATH
     with open(graph_path, encoding="utf-8") as f:
         data = json.load(f)
     html = _TEMPLATE.replace("__DATA__", json.dumps(data, ensure_ascii=False))
+    if theme == "light":
+        html = _to_light(html)
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html)
     return html_path, len(data["nodes"]), len(data["links"])
 
 
 if __name__ == "__main__":
-    path, n, e = build()
-    print(f"시각화 생성: {path} (노드 {n} · 엣지 {e})")
+    import sys
+    theme = sys.argv[1] if len(sys.argv) > 1 else "light"
+    path, n, e = build(theme=theme)
+    print(f"시각화 생성: {path} (노드 {n} · 엣지 {e}, theme={theme})")
     print("브라우저에서 graph.html 을 열면 됩니다.")

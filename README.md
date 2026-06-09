@@ -36,11 +36,11 @@
 
 ![수학 개념 선수학습 지식 그래프 — Obsidian풍 인터랙티브 시각화](assets/graph-preview.png)
 
-> 위는 `graph.html`을 실제로 렌더링한 화면입니다(영역별 색상 클러스터·선수관계 엣지·허브 개념 라벨).
+> 위는 `graph.html`을 실제로 렌더링한 화면입니다(흰색 배경·영역별 색상 클러스터·선수관계 엣지·허브 개념 라벨).
 
-`python -m src.viz` 로 자가완결 HTML을 만들고 브라우저에서 `graph.html` 을 엽니다.
+`python -m src.viz` 로 자가완결 HTML을 만들고 브라우저에서 `graph.html` 을 엽니다. (`python -m src.viz dark` 로 다크 테마도 가능)
 
-- **다크 테마 force-directed 그래프** (force-graph, canvas) — Obsidian 그래프뷰 느낌
+- **force-directed 그래프** (force-graph, canvas) — 라이트(기본)/다크 테마 지원, Obsidian 그래프뷰 느낌
 - 노드 = 개념(84개), 색상 = **영역(9개)**, 크기 = 연결 차수
 - 엣지 = 선수학습 관계, 화살표 **선수 → 후속**, 강조 시 입자 흐름
 - **검색창**에 개념 입력 / 노드 클릭 → 해당 개념의 **선수학습 조상 경로를 금색으로 강조** + 나머지 디밍
